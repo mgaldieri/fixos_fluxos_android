@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">fixos_fluxos</string>
+
+    <string name="about_button">About</string>
+    <string name="mute_button">Mute</string>
+    <string name="dummy_content">Aqui vai\na visualização</string>
+
+    <string name="title_activity_about">Sobre</string>
+    <string name="dummy_button">Dummy Button</string>
+
+    <string name="socket_host">52.1.16.127</string>
+    <string name="socket_port">80</string>
+    <string name="socket_endpoint">socket</string>
+
+    <string name="app_key">b8e9e36879fadab0858fa9df8d5c75e9ab60d34cab4cbfa5ba983ee331107431</string>
+</resources>
