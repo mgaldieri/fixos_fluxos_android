@@ -466,7 +466,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     public void handleJSON(JSONObject data) throws JSONException {
-//        Log.println(Log.DEBUG, "WebSocketMessage", data.toString(4));
+        Log.println(Log.DEBUG, "WebSocketMessage", data.toString(4));
         Document doc = database.createDocument();
         Map<String, Object> map = new HashMap<>();
 
@@ -484,7 +484,9 @@ public class FullscreenActivity extends AppCompatActivity {
         float weatherAvg = (percRed+percGreen+percBlue)/3;
 
         ambientValue = Utils.mapFloat(weatherAvg, 0, 1, AMBIENT_MIN_DIFF, AMBIENT_MAX_DIFF);
-        PdBase.sendFloat(ambientId+"-diff", ambientValue);
+        if (pdService.isRunning()) {
+            PdBase.sendFloat(ambientId + "-diff", ambientValue);
+        }
         map.put("ambiente", ambientValue);
 
         /*****
@@ -536,23 +538,26 @@ public class FullscreenActivity extends AppCompatActivity {
         }
 
         // Set pool amplitudes
-        ArrayList<Float> busAmps = new ArrayList<>();
-        for (String poolkey : busPool.keySet()) {
-            float pos = (float)((JSONObject)buses.get(poolkey)).getDouble("position");
-            float dist = Math.abs(0.5f-pos);
-            float amp = Utils.mapFloat(dist, 0.0f, 0.5f, MIN_BUS_AMP, MAX_BUS_AMP);
-            int pdBusId = (int) busPool.get(poolkey).get("pdBusId");
-            PdBase.sendFloat(pdBusId+"-amp", amp);
-            busAmps.add(amp);
-        }
+        ArrayList<Float> busAmps = null;
+        if (pdService.isRunning()) {
+            busAmps = new ArrayList<>();
+            for (String poolkey : busPool.keySet()) {
+                float pos = (float)((JSONObject)buses.get(poolkey)).getDouble("position");
+                float dist = Math.abs(0.5f-pos);
+                float amp = Utils.mapFloat(dist, 0.0f, 0.5f, MIN_BUS_AMP, MAX_BUS_AMP);
+                int pdBusId = (int) busPool.get(poolkey).get("pdBusId");
+                PdBase.sendFloat(pdBusId+"-amp", amp);
+                busAmps.add(amp);
+            }
 
-        // Silence unused slots
-        for (Number pdBusId : pdBusAvailable) {
-            PdBase.sendFloat(pdBusId+"-amp", 0.0f);
+            // Silence unused slots
+            for (Number pdBusId : pdBusAvailable) {
+                PdBase.sendFloat(pdBusId+"-amp", 0.0f);
+            }
         }
         map.put("onibus", busAmps);
 
-        /*****
+         /*****
          * Handle user data
          */
         JSONObject users = (JSONObject)data.get("appData");
@@ -599,17 +604,19 @@ public class FullscreenActivity extends AppCompatActivity {
 
         // Set pool amplitudes
         ArrayList<Float> userAmps = new ArrayList<>();
-        for (String poolkey : userPool.keySet()) {
-            float ratio = (float)((JSONObject)users.get(poolkey)).getDouble("ratio");
-            float amp = Utils.mapFloat(ratio, 1.0f/MAX_USER_RATIO, MAX_USER_RATIO, MIN_USER_AMP, MAX_USER_AMP);
-            int pdUserId = (int) userPool.get(poolkey).get("pdUserId");
-            PdBase.sendFloat(pdUserId + "-amp", amp);
-            userAmps.add(amp);
-        }
+        if (pdService.isRunning()) {
+            for (String poolkey : userPool.keySet()) {
+                float ratio = (float)((JSONObject)users.get(poolkey)).getDouble("ratio");
+                float amp = Utils.mapFloat(ratio, 1.0f/MAX_USER_RATIO, MAX_USER_RATIO, MIN_USER_AMP, MAX_USER_AMP);
+                int pdUserId = (int) userPool.get(poolkey).get("pdUserId");
+                PdBase.sendFloat(pdUserId + "-amp", amp);
+                userAmps.add(amp);
+            }
 
-        // Silence unused slots
-        for (Number pdUserId : pdUserAvailable) {
-            PdBase.sendFloat(pdUserId+"-amp", 0.0f);
+            // Silence unused slots
+            for (Number pdUserId : pdUserAvailable) {
+                PdBase.sendFloat(pdUserId+"-amp", 0.0f);
+            }
         }
         map.put("users", userAmps);
 
