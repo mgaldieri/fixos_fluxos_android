@@ -1,4 +1,4 @@
-package br.com.dobralab.arquinterfaceandroid;
+package br.com.mgaldieri.fixosfluxos;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package br.com.dobralab.arquinterfaceandroid;
+package br.com.mgaldieri.fixosfluxos;
 
 /**
  * Created by mgaldieri on 11/11/15.

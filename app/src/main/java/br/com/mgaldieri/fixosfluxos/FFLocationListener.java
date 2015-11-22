@@ -1,4 +1,4 @@
-package br.com.dobralab.arquinterfaceandroid;
+package br.com.mgaldieri.fixosfluxos;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -31,6 +31,11 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class FFLocationListener implements LocationListener {
     private String id;
+    /**
+     * As chaves de aplicativo e secreta são oferecidas sob demanda. Por favor entre em contato.
+     */
+    private final String APPKEY = "";
+    private final String APPSECRET = "";
 
     public FFLocationListener(String uuid) {
         id = uuid;
@@ -81,10 +86,9 @@ public class FFLocationListener implements LocationListener {
             JSONObject data = params[0];
             // TODO: put appkey in strings resource
             String jwt = generateJWT();
-            String appKey = "b8e9e36879fadab0858fa9df8d5c75e9ab60d34cab4cbfa5ba983ee331107431";
             try {
                 data.put("jwt", jwt);
-                data.put("appkey", appKey);
+                data.put("appkey", APPKEY);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -93,7 +97,7 @@ public class FFLocationListener implements LocationListener {
             OkHttpClient client = new OkHttpClient();
             MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
             Request request = new Request.Builder()
-                    .url("http://192.168.0.7:8989/api/v1/userdata")
+                    .url("http://52.1.16.127/api/v1/userdata")
 //                    .header("jwt", jwt)
 //                    .header("appkey", appKey)
                     .post(RequestBody.create(MEDIA_TYPE_JSON, data.toString()))
@@ -132,8 +136,7 @@ public class FFLocationListener implements LocationListener {
                 String jwtString = headerString+"."+claimsString;
 
                 // create signature
-                String appSecret = "eff832a28d914502d1d16c78f3006c18241d7b2c457dd237e23cc75249fd6b5bed834d02fd4468f7a73d0619d1a2bf83569cb1b10f44be7d5693deb2de6962ec";
-                SecretKeySpec keySpec = new SecretKeySpec(appSecret.getBytes(), "HmacSHA256");
+                SecretKeySpec keySpec = new SecretKeySpec(APPSECRET.getBytes(), "HmacSHA256");
                 Mac mac = Mac.getInstance("HmacSHA256");
                 mac.init(keySpec);
                 byte[] result = mac.doFinal(jwtString.getBytes());

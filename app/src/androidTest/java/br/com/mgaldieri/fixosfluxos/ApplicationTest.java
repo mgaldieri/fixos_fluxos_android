@@ -1,4 +1,4 @@
-package br.com.dobralab.arquinterfaceandroid;
+package br.com.mgaldieri.fixosfluxos;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

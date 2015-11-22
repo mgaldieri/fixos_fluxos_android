@@ -6,35 +6,49 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <TextView android:id="@+id/fullscreen_content" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:keepScreenOn="true" android:textColor="#404040"
-        android:textStyle="bold" android:textSize="50sp" android:gravity="center"
-        android:text="@string/dummy_content" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fullscreen_content"
+            android:src="@drawable/corte2" />
 
         <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_width="match_parent" android:layout_height="@dimen/imgbtn_height"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/black_overlay" android:orientation="horizontal"
-            tools:ignore="UselessParent">
+            tools:ignore="UselessParent"
+            android:gravity="center_horizontal">
 
-            <Button android:id="@+id/about_button" style="?metaButtonBarButtonStyle"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="0.5" android:text="@string/about_button" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/mute_button"
-                android:id="@+id/mute_button"
+            <ImageButton
+                android:layout_width="@dimen/imgbtn_height"
+                android:layout_height="@dimen/imgbtn_height"
+                android:id="@+id/about_button"
+                android:src="@drawable/plus"
+                android:maxHeight="@dimen/imgbtn_height"
+                android:scaleType="fitCenter"
                 style="?metaButtonBarButtonStyle"
-                android:layout_weight="0.5" />
+                android:layout_marginRight="55dp" />
+
+            <ImageButton
+                android:layout_width="@dimen/imgbtn_height"
+                android:layout_height="@dimen/imgbtn_height"
+                android:id="@+id/mute_button"
+                android:src="@drawable/mute"
+                android:maxHeight="@dimen/imgbtn_height"
+                android:scaleType="fitCenter"
+                style="?metaButtonBarButtonStyle"
+                android:layout_gravity="right"
+                android:layout_marginLeft="55dp" />
 
         </LinearLayout>
+
     </FrameLayout>
 
 </FrameLayout>
